@@ -1,3 +1,4 @@
+using System;
 using GarageManagementApp.Enums;
 
 namespace GarageManagementApp.Models
@@ -31,7 +32,7 @@ namespace GarageManagementApp.Models
         /// </summary>
         public override decimal CalculerTaxe()
         {
-            return Math.Floor(Cylindree * 0.3m);
+            return System.Math.Floor(Cylindree * 0.3m);
         }
 
         /// <summary>
