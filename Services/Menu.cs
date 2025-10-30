@@ -144,7 +144,19 @@ namespace GarageManagementApp.Services
 
         private void AfficherVehicules()
         {
-            Console.WriteLine("\n[TODO] Afficher les vehicules");
+            Console.WriteLine("\n=== LISTE DES VEHICULES ===\n");
+            garage.Afficher();
+            
+            // Option de tri
+            Console.Write("\nVoulez-vous trier les vehicules par prix ? (o/n) : ");
+            string reponse = Console.ReadLine()?.ToLower();
+            
+            if (reponse == "o" || reponse == "oui")
+            {
+                garage.TrierVehicule();
+                Console.WriteLine();
+                garage.Afficher();
+            }
         }
 
         private void AjouterVehicule()
@@ -164,7 +176,27 @@ namespace GarageManagementApp.Services
 
         private void AfficherOptionsVehicule()
         {
-            Console.WriteLine("\n[TODO] Afficher options d'un vehicule");
+            Console.WriteLine("\n=== AFFICHER OPTIONS D'UN VEHICULE ===\n");
+            
+            try
+            {
+                Console.Write("Entrez l'ID du vehicule : ");
+                int id = GetChoix();
+                
+                Vehicule vehicule = garage.Vehicules.FirstOrDefault(v => v.Id == id);
+                
+                if (vehicule == null)
+                {
+                    throw new VehiculeNotFoundException($"Aucun vehicule trouve avec l'ID {id}.");
+                }
+                
+                Console.WriteLine($"\nVehicule selectionne : {vehicule.Nom}");
+                vehicule.AfficherOptions();
+            }
+            catch (FormatException)
+            {
+                throw;
+            }
         }
 
         private void AjouterOptionVehicule()
@@ -179,17 +211,54 @@ namespace GarageManagementApp.Services
 
         private void AfficherOptions()
         {
-            Console.WriteLine("\n[TODO] Afficher le catalogue d'options");
+            Console.WriteLine("\n=== CATALOGUE DES OPTIONS ===\n");
+            
+            if (garage.Options.Count == 0)
+            {
+                Console.WriteLine("Aucune option disponible dans le catalogue.");
+            }
+            else
+            {
+                foreach (var option in garage.Options)
+                {
+                    option.Afficher();
+                }
+                Console.WriteLine($"\nTotal : {garage.Options.Count} option(s) disponible(s)");
+            }
         }
 
         private void AfficherMarques()
         {
-            Console.WriteLine("\n[TODO] Afficher les marques");
+            Console.WriteLine("\n=== MARQUES DISPONIBLES ===\n");
+            
+            var marques = Enum.GetValues(typeof(Marque));
+            int index = 1;
+            
+            foreach (Marque marque in marques)
+            {
+                Console.WriteLine($"  {index}. {marque}");
+                index++;
+            }
+            
+            Console.WriteLine($"\nTotal : {marques.Length} marque(s) disponible(s)");
         }
 
         private void AfficherTypesMoteurs()
         {
-            Console.WriteLine("\n[TODO] Afficher les types de moteurs");
+            Console.WriteLine("\n=== CATALOGUE DES MOTEURS ===\n");
+            
+            if (garage.Moteurs.Count == 0)
+            {
+                Console.WriteLine("Aucun moteur disponible dans le catalogue.");
+            }
+            else
+            {
+                foreach (var moteur in garage.Moteurs)
+                {
+                    moteur.Afficher();
+                }
+                Console.WriteLine($"\nTotal : {garage.Moteurs.Count} moteur(s) disponible(s)");
+            }
         }
 
         private void ChargerGarage()
