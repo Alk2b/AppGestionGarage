@@ -20,12 +20,24 @@ namespace GarageManagementApp.Models
         public List<Vehicule> Vehicules { get; set; }
 
         /// <summary>
+        /// Liste des moteurs disponibles
+        /// </summary>
+        public List<Moteur> Moteurs { get; set; }
+
+        /// <summary>
+        /// Liste des options disponibles
+        /// </summary>
+        public List<Option> Options { get; set; }
+
+        /// <summary>
         /// Constructeur principal
         /// </summary>
         public Garage(string nom)
         {
             Nom = nom;
             Vehicules = new List<Vehicule>();
+            Moteurs = new List<Moteur>();
+            Options = new List<Option>();
         }
 
         /// <summary>
@@ -34,6 +46,8 @@ namespace GarageManagementApp.Models
         public Garage()
         {
             Vehicules = new List<Vehicule>();
+            Moteurs = new List<Moteur>();
+            Options = new List<Option>();
         }
 
         /// <summary>
@@ -43,6 +57,24 @@ namespace GarageManagementApp.Models
         {
             Vehicules.Add(vehicule);
             Console.WriteLine($"Véhicule '{vehicule.Nom}' ajouté au garage.");
+        }
+
+        /// <summary>
+        /// Ajoute un moteur au catalogue
+        /// </summary>
+        public void AjouterMoteur(Moteur moteur)
+        {
+            Moteurs.Add(moteur);
+            Console.WriteLine($"Moteur '{moteur.Nom}' ajouté au catalogue.");
+        }
+
+        /// <summary>
+        /// Ajoute une option au catalogue
+        /// </summary>
+        public void AjouterOption(Option option)
+        {
+            Options.Add(option);
+            Console.WriteLine($"Option '{option.Nom}' ajoutée au catalogue.");
         }
 
         /// <summary>
