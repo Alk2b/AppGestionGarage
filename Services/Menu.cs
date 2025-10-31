@@ -523,12 +523,31 @@ namespace GarageManagementApp.Services
 
         private void ChargerGarage()
         {
-            Console.WriteLine("\n[TODO] Charger le garage depuis un fichier");
+            Console.Write("\nNom du fichier a charger (sans extension) : ");
+            string nomFichier = Console.ReadLine() ?? "garage";
+            string cheminComplet = $"{nomFichier}.json";
+
+            Garage? garageCharge = Garage.ChargerGarage(cheminComplet);
+            if (garageCharge != null)
+            {
+                this.garage = garageCharge;
+                Console.WriteLine($"\n==> Garage charge avec succes depuis '{cheminComplet}'");
+                Console.WriteLine($"    {garage.Vehicules.Count} vehicule(s), {garage.Moteurs.Count} moteur(s), {garage.Options.Count} option(s)");
+            }
+            else
+            {
+                Console.WriteLine($"\n==> Erreur : Impossible de charger le fichier '{cheminComplet}'");
+            }
         }
 
         private void SauvegarderGarage()
         {
-            Console.WriteLine("\n[TODO] Sauvegarder le garage dans un fichier");
+            Console.Write("\nNom du fichier a sauvegarder (sans extension) : ");
+            string nomFichier = Console.ReadLine() ?? "garage";
+            string cheminComplet = $"{nomFichier}.json";
+
+            garage.SauvegarderGarage(cheminComplet);
+            Console.WriteLine($"\n==> Garage sauvegarde avec succes dans '{cheminComplet}'");
         }
     }
 }
