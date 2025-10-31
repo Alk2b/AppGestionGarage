@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.IO;
 
 namespace GarageManagementApp.Models
 {
@@ -178,6 +180,76 @@ namespace GarageManagementApp.Models
         {
             Vehicules.Sort();
             Console.WriteLine("✓ Véhicules triés par prix total croissant.");
+        }
+
+        // ========== SERIALISATION JSON ==========
+
+        /// <summary>
+        /// Options de sérialisation JSON avec polymorphisme
+        /// </summary>
+        private static JsonSerializerOptions GetJsonOptions()
+        {
+            return new JsonSerializerOptions
+            {
+                WriteIndented = true, // JSON lisible avec indentation
+                PropertyNameCaseInsensitive = true
+            };
+        }
+
+        /// <summary>
+        /// Sauvegarde le garage dans un fichier JSON
+        /// </summary>
+        public void SauvegarderGarage(string filePath)
+        {
+            try
+            {
+                var options = GetJsonOptions();
+                string jsonString = JsonSerializer.Serialize(this, options);
+                File.WriteAllText(filePath, jsonString);
+                Console.WriteLine($"\n[OK] Garage sauvegarde avec succes dans '{filePath}'");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"\n[ERREUR] Echec de la sauvegarde : {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Charge un garage depuis un fichier JSON
+        /// </summary>
+        public static Garage? ChargerGarage(string filePath)
+        {
+            try
+            {
+                if (!File.Exists(filePath))
+                {
+                    Console.WriteLine($"\n[ATTENTION] Fichier '{filePath}' introuvable.");
+                    return null;
+                }
+
+                var options = GetJsonOptions();
+                string jsonString = File.ReadAllText(filePath);
+                Garage? garage = JsonSerializer.Deserialize<Garage>(jsonString, options);
+
+                if (garage != null)
+                {
+                    Console.WriteLine($"\n[OK] Garage '{garage.Nom}' charge avec succes !");
+                    Console.WriteLine($"     - {garage.Vehicules.Count} vehicule(s)");
+                    Console.WriteLine($"     - {garage.Moteurs.Count} moteur(s)");
+                    Console.WriteLine($"     - {garage.Options.Count} option(s)");
+                    return garage;
+                }
+                else
+                {
+                    Console.WriteLine("\n[ERREUR] Echec de la deserialisation.");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"\n[ERREUR] Echec du chargement : {ex.Message}");
+                return null;
+            }
         }
     }
 }
